@@ -1,0 +1,96 @@
+<main class="container bg-light pb-5">
+  <header class="row d-block">
+    <h1 class="px-3 pt-3 pb-1 mb-0 bg-dark text-white">ng-rest-model</h1>
+
+    <p class="px-3 pb-4 pt-0 mt-0 bg-dark text-muted">
+      A JavaScript model class for easily calling REST API inspired by Laravel's ORM
+    </p>
+  </header>
+
+  <section class="row mt-5" id="data-table">
+    <div class="col">
+      <table class="table table-sm">
+        <tbody>
+        <ng-template ngFor [ngForOf]="users$ | async" let-user>
+          <tr (click)="select(user)"
+              style="cursor: pointer"
+              [class.table-active]="selectedUser === user"
+          >
+            <td>
+              <a href="" (click)="removeUser(user, $event)">Remove</a>
+              <a href="" (click)="editUser(user, $event)">Edit</a>
+            </td>
+            <td>{{user.name}}</td>
+            <td>{{user.email}}</td>
+            <td>{{user.phone}}</td>
+          </tr>
+          <tr *ngIf="selectedUser === user">
+            <td colspan="4" class="py-5">
+              <h5 class="text-center">Albums:</h5>
+              <div class="albums">
+                <table class="album-table m-auto">
+                  <tbody>
+                  <ng-template [ngIf]="user.albums | async" let-albums [ngIfElse]="loading">
+                    <tr *ngFor="let album of albums">
+                      <td>
+                        <a href="" (click)="removeAlbum(album, $event)">Remove</a>
+                        <a href="" (click)="editAlbum(album, $event)">Edit</a>
+                      </td>
+                      <td>{{ album.title }}</td>
+                    </tr>
+                  </ng-template>
+                  <ng-template #loading>
+                    <tr>
+                      <td>Loading...</td>
+                    </tr>
+                  </ng-template>
+                  </tbody>
+                </table>
+                <button type="button" class="btn btn-outline-primary" (click)="newAlbum()">New album</button>
+                <form (submit)="saveAlbum()" *ngIf="formModels.album">
+                  <input [(ngModel)]="formModels.album.title" name="title" placeholder="Title" />
+                  <button class="btn btn-outline-primary">Save</button>
+                </form>
+              </div>
+            </td>
+          </tr>
+        </ng-template>
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+  <section class="row" id="new-user">
+    <div class="col">
+      <button type="button" class="btn btn-outline-primary" (click)="newUser()">New user</button>
+      <form (submit)="saveUser()" *ngIf="formModels.user">
+        <input [(ngModel)]="formModels.user.name" name="name" placeholder="Name" />
+        <input [(ngModel)]="formModels.user.email" name="email" placeholder="Email" />
+        <input [(ngModel)]="formModels.user.phone" name="phone" placeholder="Phone" />
+        <button class="btn btn-outline-primary">Save</button>
+      </form>
+    </div>
+  </section>
+
+  <section class="row py-5" id="codes">
+    <div class="col">
+      <ul class="nav nav-tabs">
+        <li class="nav-item" *ngFor="let tab of tabs">
+          <a class="nav-link"
+             [class.active]="tabs.selected === tab"
+             href="#"
+             (click)="selectTab(tab, $event)"
+          >{{ tab.name }}</a>
+        </li>
+      </ul>
+
+      <div class="p-3 border border-top-0 bg-white">
+        <demo-app-module *ngIf="tabs.selected.name === 'app.module.ts'"></demo-app-module>
+        <demo-album *ngIf="tabs.selected.name === 'album.ts'"></demo-album>
+        <demo-user *ngIf="tabs.selected.name === 'user.ts'"></demo-user>
+        <demo-app-component *ngIf="tabs.selected.name === 'app.component.ts'"></demo-app-component>
+        <demo-app-component-html *ngIf="tabs.selected.name === 'app.component.html'"></demo-app-component-html>
+      </div>
+    </div>
+  </section>
+</main>
