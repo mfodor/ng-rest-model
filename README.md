@@ -29,10 +29,12 @@ If the same domain should be called (e.g. the requests are proxied) the `forRoot
 ```typescript
 @NgModule({
     provide: [
-        MyModel
+        User
     ]
 })
 ```
+
+You have to extend the abstract class RestService. Generic type is optional.
 
 ```typescript
 @Injectable()
