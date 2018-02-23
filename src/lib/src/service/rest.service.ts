@@ -189,7 +189,7 @@ export abstract class RestService<I = any> {
             return this._hasManyStore[key];
         }
 
-        let hasManyConfig: HasManyConfiguration = this.hasMany && this.hasMany[key];
+        let hasManyConfig: HasManyConfiguration = <HasManyConfiguration>(this.hasMany && this.hasMany[key]);
 
         if (!hasManyConfig) {
             return Observable.of(null);
