@@ -75,7 +75,7 @@ export class HasManyExtender<T extends RestService> implements HasManyProps<T> {
     _remove(item: T, options?: any): Observable<T> {
         return item.remove(options).map((removed: T) => {
             if (this._list) {
-                const index = this._list.findIndex(i => i.primaryValue === item.primaryValue);
+                const index = this._list.findIndex(i => i[item['primaryKey']] === item.primaryValue);
                 if (index > -1) {
                     this._list.splice(index, 1);
                 }
