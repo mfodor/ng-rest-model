@@ -179,7 +179,11 @@ export abstract class RestService<I = any> {
         Object.defineProperty(this, key, {
             get: () => this.load(key),
             set: (values: any[]) => {
-                this._hasManyStore[key] = Observable.of(values);
+                let hasManyConfig: HasManyConfiguration = <HasManyConfiguration>(this.hasMany && this.hasMany[key]);
+                if (!hasManyConfig) {
+                    return;
+                }
+                this._hasManyStore[key] = new HasManyExtender(hasManyConfig).extend(Observable.of(values));
             }
         });
     }
