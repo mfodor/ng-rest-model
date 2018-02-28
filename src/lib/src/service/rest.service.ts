@@ -179,7 +179,7 @@ export abstract class RestService<I = any> {
         Object.defineProperty(this, key, {
             get: () => this.load(key),
             set: (values: any[]) => {
-                let hasManyConfig: HasManyConfiguration = <HasManyConfiguration>(this.hasMany && this.hasMany[key]);
+                const hasManyConfig: HasManyConfiguration = this.getHasManyConfig(key);
                 if (!hasManyConfig) {
                     return;
                 }
@@ -188,15 +188,11 @@ export abstract class RestService<I = any> {
         });
     }
 
-    load<T = any>(key: string): Observable<T[]> {
-        if (this._hasManyStore[key]) {
-            return this._hasManyStore[key];
-        }
-
+    private getHasManyConfig(key: string): HasManyConfiguration {
         let hasManyConfig: HasManyConfiguration = <HasManyConfiguration>(this.hasMany && this.hasMany[key]);
 
         if (!hasManyConfig) {
-            return Observable.of(null);
+            return null;
         }
 
         if (hasManyConfig instanceof RestService) {
@@ -206,6 +202,20 @@ export abstract class RestService<I = any> {
             };
         } else {
             hasManyConfig.type = hasManyConfig.type || 'service';
+        }
+
+        return hasManyConfig;
+    }
+
+    load<T = any>(key: string): Observable<T[]> {
+        if (this._hasManyStore[key]) {
+            return this._hasManyStore[key];
+        }
+
+        let hasManyConfig: HasManyConfiguration = this.getHasManyConfig(key);
+
+        if (!hasManyConfig) {
+            return Observable.of(null);
         }
 
         let obs: Observable<T[]>;
