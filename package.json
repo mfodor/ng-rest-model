@@ -1,6 +1,6 @@
 {
   "name": "ng-rest-model",
-  "version": "0.0.2",
+  "version": "0.0.3",
   "description": "A JavaScript model class for easily calling REST API inspired by Laravel's ORM",
   "main": "./bundles/ng-rest-model.umd.js",
   "module": "./ng-rest-model.es5.js",
