@@ -1,11 +1,14 @@
 export interface ILengthAwarePaginator<T = any> {
-    current_page: number;
     data: T[];
-    from: number;
-    last_page: number;
-    next_page_url: string;
-    per_page: number;
-    prev_page_url: string;
-    to: number;
     total: number;
+    per_page: number;
+    current_page: number;
+    last_page: number;
+    from: number;
+    to: number;
+    first_page_url: string;
+    prev_page_url: string;
+    next_page_url: string;
+    last_page_url: string;
+    path: string;
 }

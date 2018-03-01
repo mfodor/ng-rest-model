@@ -4,13 +4,14 @@ import 'rxjs/add/observable/of';
 import 'rxjs/add/operator/map';
 import 'rxjs/add/operator/mergeMap';
 import {Observable} from 'rxjs/Observable';
-import {ApiUrlMaker, HasManyConfiguration, HasManyExtender, NgRestModelConfig} from '../../';
+import {ApiUrlMaker, HasManyConfiguration, HasManyExtender, ILengthAwarePaginator, NgRestModelConfig} from '../../';
 
 @Injectable()
-export abstract class RestService<I = any> {
+export abstract class RestService<I = any, P = ILengthAwarePaginator<I>> {
     protected abstract route: string;
     protected fillable: string[] = [];
     protected primaryKey = 'id';
+    protected pagingItemsKey = 'data';
     protected parents: RestService[] = [];
     protected hasMany: { [key: string]: HasManyConfiguration | RestService };
 
@@ -58,11 +59,36 @@ export abstract class RestService<I = any> {
         return <any>obs;
     }
 
+    page(page?: string | number, options?: any): Observable<P> {
+        if (!options && typeof page === 'object') {
+            options = page;
+            page = void 0;
+        }
+        let url: string;
+        if (isNaN(+page) && typeof page === 'string') {
+            url = page;
+        } else {
+            if (typeof page === 'number') {
+                options = options || {};
+                options.params = Object.assign(options.params || {}, {page});
+            }
+            url = this.itemsUrl().build();
+        }
+        const obs = this._http.get(url, options);
+        if (!options || !options.observe || options.observe === 'body') {
+            return (<any>obs).map((resp: P) => {
+                resp[this.pagingItemsKey].map(this._create.bind(this));
+                return resp;
+            });
+        }
+        return <any>obs;
+    }
+
     find(id: number | any, options?: any): Observable<this> {
         return this._http.get(this.itemUrl(id).build(), options).map(this._create.bind(this));
     }
 
-    refresh(options?: any): Observable<this> {
+    fresh(options?: any): Observable<this> {
         return this._http.get(this.itemUrl(this.primaryValue).build(), options).map(this.trustedFill.bind(this));
     }
 
@@ -198,7 +224,7 @@ export abstract class RestService<I = any> {
         if (hasManyConfig instanceof RestService) {
             hasManyConfig = {
                 type: 'service',
-                service: hasManyConfig.new().addParent(this)
+                service: hasManyConfig.new().addParent(<any>this)
             };
         } else {
             hasManyConfig.type = hasManyConfig.type || 'service';
