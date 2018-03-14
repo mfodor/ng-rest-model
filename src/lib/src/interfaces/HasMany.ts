@@ -1,7 +1,7 @@
 import {Observable} from 'rxjs/Observable';
 import {RestService} from '../../';
 
-export interface HasMany<T extends RestService> extends HasManyProps<T>, Observable<T[]> {
+export interface IHasMany<T extends RestService> extends HasManyProps<T>, Observable<T[]> {
 }
 
 export interface HasManyProps<T extends RestService> {
