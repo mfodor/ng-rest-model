@@ -3,8 +3,24 @@ A JavaScript model class for easily calling REST API inspired by Laravel's ORM
 
 # Warning
 
-This module is under hard development but is usable already. However, there is no warranty that it won't
-fail in some situations.
+This module is under hard development but is usable already. However, there is no
+warranty that it won't fail in some situations.
+
+## Upcoming improvements
+
+- annotations (including @Path, @HasMany, @BelongsTo, @Mapping, @Protected, @PrimaryKey)
+- unit tests
+
+## Unresolved issues
+
+Below are the issues that are about to be avoided/eliminated but there are no
+ideas currently how to do. If you are aware of the solution any of them, please
+let me know. Email: mfodor@doxasoft.hu.
+
+#### avoid the need of passing any parameters to RestService constructor
+
+This is basicly needed now because of HttpClient especially when JWT interceptor
+comes to play - tested with [@auth0/angular-jwt](https://github.com/auth0/angular2-jwt)
 
 ## Usage
 
@@ -128,3 +144,11 @@ export class AppComponent implements OnInit {
     </tbody>
 </table>
 ```
+
+## Contributing
+
+Any contribution is welcome if the goal is not missed: to have a useful ORM
+like service that not fits for every situation but for most of the cases and is
+easily configurable.
+
+More details in the [CONTRIBUTING.md](CONTRIBUTING.md) file.
