@@ -1,5 +1,6 @@
 import {Observable} from 'rxjs/Observable';
 import {RestService} from '../../';
+import {RestModel} from '../service/rest-model';
 
 export interface IHasMany<T extends RestService> extends HasManyProps<T>, Observable<T[]> {
 }
@@ -18,7 +19,7 @@ export interface HasManyConfiguration {
     type?: 'service' | 'route' | 'params' | 'explicit' | 'no-api';
 
     // rest service to use to fetch data
-    service?: RestService;
+    service?: RestService | RestModel;
 
     // if type is route this is the appended path route
     route?: string;

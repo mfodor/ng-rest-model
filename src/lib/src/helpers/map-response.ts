@@ -1,6 +1,6 @@
-export function mapResponse (items: any[], type: Function): any {
+export function mapResponse(items: any[], type: { new(...args: any[]): any }): any {
     if (!Array.isArray(items) || !items) {
         return items;
     }
-    return items.map(i => new (<any>type)(i)); // TODO check it there is an initializer function
+    return items.map(i => new (<any>type)().init(i));
 }

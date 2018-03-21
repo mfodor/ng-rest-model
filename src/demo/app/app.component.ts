@@ -24,14 +24,20 @@ export class AppComponent implements OnInit {
         album: Album;
     };
 
+    selected: {
+        user: User;
+        album: Album;
+    };
+
     tabs: Tabs;
 
-    constructor(private userService: User) {
-    }
-
     ngOnInit() {
-        this.users$ = this.userService.all();
+        this.users$ = User.all();
         this.formModels = {
+            user: null,
+            album: null
+        };
+        this.selected = {
             user: null,
             album: null
         };
@@ -60,18 +66,23 @@ export class AppComponent implements OnInit {
     }
 
     newUser() {
-        this.formModels.user = this.userService.new();
+        this.formModels.user = new User();
     }
 
     editUser(user: User, event: Event) {
         event.preventDefault();
         event.stopPropagation();
-        this.formModels.user = user;
+        this.selected.user = user;
+        this.formModels.user = user.clone();
     }
 
     saveUser() {
         this.formModels.user.save()
             .subscribe((user: User) => {
+                if (this.selected.user) {
+                    this.selected.user.fill(user);
+                }
+                this.selected.user = null;
                 this.formModels.user = null;
                 alert(`Saved user: ${user.name} (${user.email}, ${user.phone})`);
             });
@@ -86,13 +97,14 @@ export class AppComponent implements OnInit {
     }
 
     newAlbum() {
-        this.formModels.album = this.selectedUser.albums._new();
+        this.formModels.album = new Album();
     }
 
     editAlbum(album: Album, event: Event) {
         event.preventDefault();
         event.stopPropagation();
-        this.formModels.album = album;
+        this.selected.album = album;
+        this.formModels.album = album.clone();
     }
 
     saveAlbum() {
@@ -104,7 +116,7 @@ export class AppComponent implements OnInit {
     }
 
     addAlbum(): void {
-        this.selectedUser.albums._add(this.formModels.album).subscribe((added: Album) => {
+        this.selectedUser.$hasMany.albums.create(this.formModels.album).subscribe((added: Album) => {
             this.formModels.album = null;
             alert('added album: ' + added.title);
         });
@@ -112,6 +124,8 @@ export class AppComponent implements OnInit {
 
     updateAlbum(): void {
         this.formModels.album.save().subscribe((updated: Album) => {
+            this.selected.album.fill(updated);
+            this.selected.album = null;
             this.formModels.album = null;
             alert('updated album: ' + updated.title);
         });
@@ -120,7 +134,7 @@ export class AppComponent implements OnInit {
     removeAlbum(album: Album, event: Event): void {
         event.preventDefault();
         event.stopPropagation();
-        this.selectedUser.albums._remove(album).subscribe((removed: Album) => {
+        this.selectedUser.$hasMany.albums.remove(album).subscribe((removed: Album) => {
             alert('removed album: ' + removed.title);
         });
     }

@@ -4,7 +4,8 @@ import 'rxjs/add/operator/map';
 import {Observable} from 'rxjs/Observable';
 import {last} from 'rxjs/operators/last';
 import {map} from 'rxjs/operators/map';
-import {ApiUrlMaker, RestService} from '../../';
+import {RestService} from './rest.service';
+import {ApiUrlMaker} from '../classes/index';
 
 export interface FileUploadRequestData {
     file: File;
@@ -13,7 +14,7 @@ export interface FileUploadRequestData {
 
 @Injectable()
 export abstract class UploadService<I = any> extends RestService<I> {
-    protected upload_prefix = 'upload';
+    protected $upload_prefix = 'upload';
 
     upload<T = any>(formData: FormData | File | FileUploadRequestData): Observable<T> {
         return this.doUpload(this.uploadUrl(), this.createFormData(formData));
@@ -66,15 +67,15 @@ export abstract class UploadService<I = any> extends RestService<I> {
     }
 
     protected uploadUrl(): ApiUrlMaker {
-        return this.getUploadBaseUrl().all(this.route);
+        return this.getUploadBaseUrl().all(this.$route);
     }
 
     protected propertyUploadUrl(property: string): ApiUrlMaker {
-        return this.getUploadBaseUrl().one(this.route, this.primaryValue).all(property);
+        return this.getUploadBaseUrl().one(this.$route, this.primaryValue).all(property);
     }
 
     protected getUploadBaseUrl(): ApiUrlMaker {
-        const uploadBase = new ApiUrlMaker().all(this.upload_prefix);
+        const uploadBase = new ApiUrlMaker().all(this.$upload_prefix);
         return this.addParentRoutesTo(uploadBase);
     }
 

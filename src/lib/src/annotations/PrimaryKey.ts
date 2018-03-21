@@ -1,5 +1,5 @@
-import {getClassName} from '../helpers';
-import {RestService} from '../service';
+import {getClassName} from '../helpers/index';
+import {RestService} from '../service/index';
 
 export function PrimaryKey(): any {
     return function (target: any, fieldName: string) {

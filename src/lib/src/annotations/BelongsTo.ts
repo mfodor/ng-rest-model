@@ -1,18 +1,18 @@
-import {RestService} from '../service';
-import {FetchMode, TFetchMode} from '../classes';
-import {getClassName, getter} from '../helpers';
+import {RestModel} from '../service/index';
+import {FetchMode, TFetchMode} from '../classes/index';
+import {getClassName, getter} from '../helpers/index';
 
-export interface BelongsToConfig {
+export interface BelongsToConfig<T = any> {
     field: string;
     route?: string;
-    type?: Function;
+    type?: { new(...args: any[]): T };
     fetch?: TFetchMode;
     async?: boolean;
 }
 
-export function BelongsTo(
+export function BelongsTo<T = any>(
     field: string | BelongsToConfig,
-    type?: Function,
+    type?: { new(...args: any[]): T },
     route?: string,
     fetch?: TFetchMode,
     async?: boolean
@@ -20,13 +20,13 @@ export function BelongsTo(
     if (typeof field === 'object') {
         type = field.type;
         route = field.route || field.field;
-        fetch = field.fetch || FetchMode.EAGER;
-        async = fetch === FetchMode.LAZY || field.async;
+        fetch = field.fetch || FetchMode.LAZY;
+        async = fetch === FetchMode.LAZY || !!field.async;
         field = field.field;
     } else {
         route = route || field;
-        fetch = fetch || FetchMode.EAGER;
-        async = fetch === FetchMode.LAZY || async;
+        fetch = fetch || FetchMode.LAZY;
+        async = fetch === FetchMode.LAZY || !!async;
     }
 
     const privateFieldName = `_${field}`;
@@ -39,9 +39,9 @@ export function BelongsTo(
             );
         }
 
-        if (!RestService.isPrototypeOf(target)) {
+        if (!RestModel.isPrototypeOf(target)) {
             throw new Error(
-                'BelongsTo decorator should be applied on a class that extends Resource!' +
+                'BelongsTo decorator should be applied on a class that extends RestService!' +
                 ` But ${getClassName(target)} is not extending it.`
             );
         }
@@ -56,7 +56,7 @@ export function BelongsTo(
             }
 
             set [<string>field](related: any) {
-                this[privateFieldName] = type && related && new (<any>type)(related) || related;
+                this[privateFieldName] = type && related && new (<any>type)().init(related) || related;
             }
         };
     };

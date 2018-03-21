@@ -1,3 +1,4 @@
-export * from './ApiUrlMaker';
-export * from './FetchMode';
-export * from './HasManyExtender';
+export {ApiUrlMaker} from './ApiUrlMaker';
+export {FetchMode, TFetchMode} from './FetchMode';
+export {HasManyExtender} from './HasManyExtender';
+export {HasManyHandler} from './HasManyHandler';

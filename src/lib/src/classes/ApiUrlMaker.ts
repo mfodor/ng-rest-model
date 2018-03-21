@@ -18,6 +18,7 @@ export class ApiUrlMaker {
 
     private addPart(part: string | number): ApiUrlMaker {
         if (!this.isValidArgument(part)) {
+            console.error('Trying to add invalid argument: ', part);
             throw new Error('InvalidArgumentException');
         }
         this._parts.push('' + part);

@@ -1,11 +1,11 @@
-import {getClassName} from '../helpers';
-import {RestService} from '../service';
+import {getClassName} from '../helpers/index';
+import {RestService} from '../service/index';
 
-export function Mapping(fieldNameOnServer: string): any {
+export function Column(fieldNameOnServer: string): any {
     return function (target: any, fieldNameOnClient: string) {
         if (!RestService.isPrototypeOf(target.constructor)) {
             throw new Error(
-                'Mapping decorator should be applied on a class that extends Resource!' +
+                'Column decorator should be applied on a class that extends RestService!' +
                 ` But ${getClassName(target)} is not extending it.`
             );
         }

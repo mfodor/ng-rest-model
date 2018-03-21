@@ -22,7 +22,8 @@ describe('NgRestModelConfig', () => {
     it('should configure with given options', inject([NgRestModelConfig], (service: NgRestModelConfig) => {
         const host = 'host:8080/api';
         service.configure({
-            baseUrl: host
+            baseUrl: host,
+            http: <any>{}
         });
         expect(service.baseUrl).toBe(host);
     }));

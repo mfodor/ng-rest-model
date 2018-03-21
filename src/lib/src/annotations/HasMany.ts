@@ -1,37 +1,44 @@
-import {FetchMode, TFetchMode} from '../classes';
-import {RestService} from '../service';
-import {getClassName, getter, mapResponse} from '../helpers';
+import {HasManyHandler} from '../classes/HasManyHandler';
+import {FetchMode, TFetchMode} from '../classes/index';
+import {RestModel} from '../service/index';
+import {getClassName} from '../helpers/index';
 
-export interface HasManyConfig {
+export interface HasManyConfig<T = any> {
     field: string;
     route?: string;
-    type?: Function;
+    type?: {new(...args: any[]): T};
     fetch?: TFetchMode;
     async?: boolean;
 }
 
-export function HasMany(
+export function HasMany<T = any>(
     field: string | HasManyConfig,
-    type?: Function,
+    type?: {new(...args: any[]): T},
     route?: string,
     fetch?: TFetchMode,
     async?: boolean
 ): any {
+    let config: HasManyConfig;
     if (typeof field === 'object') {
-        type = field.type;
-        route = field.route || field.field;
-        fetch = field.fetch || FetchMode.EAGER;
-        async = fetch === FetchMode.LAZY || field.async;
-        field = field.field;
+        config = {
+            type: field.type,
+            route: field.route || field.field,
+            fetch: field.fetch || FetchMode.LAZY,
+            async: !!field.async,
+            field: field.field
+        };
     } else {
-        route = route || field;
-        fetch = fetch || FetchMode.EAGER;
-        async = fetch === FetchMode.LAZY || async;
+        config = {
+            route: route || field,
+            fetch: fetch || FetchMode.LAZY,
+            async: !!async,
+            type: type,
+            field: field
+        };
     }
+    config.async = config.fetch === FetchMode.LAZY || config.async;
 
-    const privateFieldName = `_${field}`;
-
-    return function <T extends { new(...args: any[]): {} }>(target: T, propertyKey: string) {
+    return function <T extends {new(...args: any[]): {}}>(target: T, propertyKey: string) {
         if (typeof target !== 'function') {
             throw new Error(
                 'HasMany decorator should be applied on the class and not on the property!' +
@@ -39,24 +46,26 @@ export function HasMany(
             );
         }
 
-        if (!RestService.isPrototypeOf(target)) {
+        if (!RestModel.isPrototypeOf(target)) {
             throw new Error(
-                'HasMany decorator should be applied on a class that extends Resource!' +
+                'HasMany decorator should be applied on a class that extends RestService!' +
                 ` But ${getClassName(target)} is not extending it.`
             );
         }
 
         return class extends target {
             get [<string>field]() {
-                if (this[privateFieldName] || fetch === FetchMode.EAGER) {
-                    return getter(async, this[privateFieldName]);
-                }
-
-                return this[privateFieldName] = (<any>this).lazyLoad(route);
+                return this['$hasMany'][<string>field].list;
             }
 
             set [<string>field](items: any[]) {
-                this[privateFieldName] = mapResponse(items, type);
+                this['$hasMany'][<string>field].setList(items);
+            }
+
+            constructor(...args: any[]) {
+                super(...args);
+                const $hasMany = this['$hasMany'];
+                $hasMany[<string>field] = new HasManyHandler(<any>this, config);
             }
         };
     };

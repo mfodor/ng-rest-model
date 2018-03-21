@@ -22,6 +22,7 @@ export abstract class Resource {
         this.$primaryKey = this.$primaryKey || 'id';
         this.$protected = ['$route', '$fillable', '$protected', '$primaryKey', '$mappings']
             .concat((this.$protected || []));
+        Object.defineProperty(this, '$protected', {value: this.$protected, writable: false});
     }
 
     fill(obj: this): this {
@@ -55,8 +56,8 @@ export abstract class Resource {
         }
 
         return Observable.of(list)
-                         .delay(500 + Math.round(Math.random() * 2500))
-                         .map(resp => this[field] = resp);
+            .delay(500 + Math.round(Math.random() * 2500))
+            .map(resp => this[field] = resp);
     }
 
     plain() {

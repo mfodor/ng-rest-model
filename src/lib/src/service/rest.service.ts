@@ -4,14 +4,17 @@ import 'rxjs/add/observable/of';
 import 'rxjs/add/operator/map';
 import 'rxjs/add/operator/mergeMap';
 import {Observable} from 'rxjs/Observable';
-import {ApiUrlMaker, HasManyConfiguration, HasManyExtender, ILengthAwarePaginator, NgRestModelConfig} from '../../';
+import {ApiUrlMaker, HasManyConfiguration, HasManyExtender, ILengthAwarePaginator, NgRestModelConfig} from '../../index';
 
 @Injectable()
 export abstract class RestService<I = any, P = ILengthAwarePaginator<I>> {
-    protected abstract route: string;
-    protected fillable: string[] = [];
-    protected primaryKey = 'id';
-    protected pagingItemsKey = 'data';
+    protected $route: string;
+    protected $primaryKey = 'id';
+    protected $fillable: string[];
+    protected $protected: string[];
+    protected $mappings: { [index: string]: string };
+
+    protected $pagingItemsKey = 'data';
     protected parents: RestService[] = [];
     protected hasMany: { [key: string]: HasManyConfiguration | RestService };
 
@@ -23,6 +26,9 @@ export abstract class RestService<I = any, P = ILengthAwarePaginator<I>> {
         protected _config: NgRestModelConfig
     ) {
         this._constructorParams = [this._http, this._config];
+        this.$primaryKey = this.$primaryKey || 'id';
+        this.$protected = ['$route', '$fillable', '$protected', '$primaryKey', '$mappings']
+            .concat((this.$protected || []));
     }
 
     init(obj?: I): this {
@@ -38,7 +44,7 @@ export abstract class RestService<I = any, P = ILengthAwarePaginator<I>> {
     }
 
     get primaryValue(): number | any {
-        return this[this.primaryKey];
+        return this[this.$primaryKey];
     }
 
     get postData(): any {
@@ -77,7 +83,7 @@ export abstract class RestService<I = any, P = ILengthAwarePaginator<I>> {
         const obs = this._http.get(url, options);
         if (!options || !options.observe || options.observe === 'body') {
             return (<any>obs).map((resp: P) => {
-                resp[this.pagingItemsKey].map(this._create.bind(this));
+                resp[this.$pagingItemsKey].map(this._create.bind(this));
                 return resp;
             });
         }
@@ -121,28 +127,30 @@ export abstract class RestService<I = any, P = ILengthAwarePaginator<I>> {
     protected onAfterFill() {
     }
 
-    fill(obj?: I): this {
-        if (!obj) {
-            return;
+    fill(obj?: I, clearMissing: boolean = false): this {
+        if (!obj || typeof obj !== 'object') {
+            console.error('Trying to fill with non-object! This is a silence error.', obj);
+            return <any>this;
         }
-        if (this.fillable) {
-            this.fillable.forEach(f => {
-                if (obj.hasOwnProperty(f)) {
-                    this[f] = obj[f];
-                }
-            });
+
+        const fieldsToFill = this.getFieldsToFill();
+        for (const key of fieldsToFill) {
+            if (clearMissing || obj.hasOwnProperty(key)) {
+                this[this.getMappedKey(key)] = obj[key];
+            }
         }
+
         this.onAfterFill();
         return <any>this;
     }
 
     protected trustedFill(obj?: any): this {
-        if (typeof obj !== 'object') {
+        if (!obj || typeof obj !== 'object') {
             return <any>this;
         }
         for (const prop in obj) {
             if (obj.hasOwnProperty(prop)) {
-                this[prop] = obj[prop];
+                this[this.getMappedKey(prop)] = obj[prop];
             }
         }
         this.onAfterFill();
@@ -315,29 +323,48 @@ export abstract class RestService<I = any, P = ILengthAwarePaginator<I>> {
     protected addParentRoutesTo(maker?: ApiUrlMaker): ApiUrlMaker {
         maker = maker || new ApiUrlMaker(this._config.baseUrl);
         if (this.parents.length) {
-            this.parents.forEach(p => maker.one(p.route, p.primaryValue));
+            this.parents.forEach(p => maker.one(p.$route, p.primaryValue));
         }
         return maker;
     }
 
     protected itemsUrl(): ApiUrlMaker {
-        return this.getBaseUrl().all(this.route);
+        return this.getBaseUrl().all(this.$route);
     }
 
     protected itemUrl(id: number | any = null): ApiUrlMaker {
-        return this.getBaseUrl().one(this.route, id || this.primaryValue);
+        return this.getBaseUrl().one(this.$route, id || this.primaryValue);
     }
 
     /* *
      * Overrides
      */
 
-    toJSON() {
+    plain() {
         const json = {};
-        for (const prop of this.fillable) {
-            json[prop] = this[prop];
+        for (const key of this.getFieldsToFill()) {
+            json[this.getMappedKey(key)] = this[key];
         }
-        json[this.primaryKey] = this.primaryValue;
+        json[this.$primaryKey] = this.primaryValue;
         return json;
+    }
+
+    toJSON() {
+        return this.plain();
+    }
+
+    private getMappedKey(key: string): string {
+        return this.$mappings && this.$mappings[key] || key;
+    }
+
+    protected getFieldsToFill(): string[] {
+        if (!this.$protected || !this.$protected.length) {
+            throw new Error('Overwriting or deleting $protected field is forbidden!');
+        }
+
+        const excludeKeys = this.$protected.concat(this.$primaryKey);
+
+        return (this.$fillable || Object.keys(this))
+            .filter(key => excludeKeys.indexOf(key) === -1);
     }
 }

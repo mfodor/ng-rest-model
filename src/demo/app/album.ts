@@ -1,17 +1,34 @@
-import {HttpClient} from '@angular/common/http';
-import {Injectable} from '@angular/core';
-import {NgRestModelConfig, RestService} from 'ng-rest-model';
+import {Path, PrimaryKey, RestModel} from 'ng-rest-model';
 import 'rxjs/add/operator/map';
 
-@Injectable()
-export class Album extends RestService<Album> {
+export interface IAlbum {
     id: number;
     title: string;
+}
 
-    protected route = 'albums';
-    protected fillable = ['title'];
+@Path('albums')
+export class Album extends RestModel<IAlbum> {
 
-    constructor(http: HttpClient, config: NgRestModelConfig) {
-        super(http, config);
+    // @PrimaryKey()
+    id: number;
+
+    title: string;
+
+    // protected route = 'albums';
+    protected $fillable = ['title'];
+
+    constructor(
+        idOrObj?: number | IAlbum,
+        title?: string
+    ) {
+        super();
+        if (!idOrObj) {
+            return;
+        }
+        if (typeof idOrObj === 'object') {
+            this.init(idOrObj);
+        } else {
+            this.init({id: idOrObj, title});
+        }
     }
 }

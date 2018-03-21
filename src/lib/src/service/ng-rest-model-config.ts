@@ -1,20 +1,28 @@
 import {Injectable} from '@angular/core';
+import {HttpClient} from '@angular/common/http';
 
 @Injectable()
 export class NgRestModelConfig {
 
-    private _baseUrl = '';
+    static BASE_URL: string;
+    static HTTP: HttpClient;
 
     public get baseUrl(): string {
-        return this._baseUrl;
+        return NgRestModelConfig.BASE_URL;
+    }
+
+    public get http(): HttpClient {
+        return NgRestModelConfig.HTTP;
     }
 
     configure(options: INgRestModelConfig): void {
-        this._baseUrl = options && options.baseUrl || this._baseUrl;
+        NgRestModelConfig.BASE_URL = options && options.baseUrl || '';
+        NgRestModelConfig.HTTP = options && options.http;
     }
 
 }
 
 export interface INgRestModelConfig {
+    http: HttpClient;
     baseUrl?: string;
 }

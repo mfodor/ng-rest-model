@@ -1,6 +1,6 @@
 import 'rxjs/add/operator/map';
 import {Observable} from 'rxjs/Observable';
-import {HasManyConfiguration, HasManyProps, RestService} from '../../';
+import {HasManyConfiguration, HasManyProps, RestService} from '../../index';
 
 export class HasManyExtender<T extends RestService> implements HasManyProps<T> {
     private _list: T[];

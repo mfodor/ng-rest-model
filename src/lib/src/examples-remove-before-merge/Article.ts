@@ -1,25 +1,25 @@
-import {BelongsTo, Mapping, Path, PrimaryKey, Protected} from '../annotations';
-import {Resource} from './Resource';
+import {BelongsTo, Column, Path, PrimaryKey, Protected} from '../annotations/index';
 import {User} from './User';
+import {RestModel} from '../service/index';
 
 @Path('users')
 @BelongsTo('author', User)
-export class Article extends Resource /* RestService */ {
+export class Article extends RestModel {
 
     @PrimaryKey()
     public azon: number;
 
     public title: string;
 
-    @Mapping('author_id')
+    @Column('author_id')
     public authorId: number;
 
     @Protected()
-    @Mapping('created_at')
+    @Column('created_at')
     public createdAt: string;
 
     @Protected()
-    @Mapping('updated_at')
+    @Column('updated_at')
     public updatedAt: string;
 
     // BelongsTo
