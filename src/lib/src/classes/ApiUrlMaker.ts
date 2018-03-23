@@ -9,7 +9,7 @@ export class ApiUrlMaker {
 
     public one(collection: string | number, element: string | number): ApiUrlMaker {
         this.addPart(collection);
-        return element && this.addPart(element) || this;
+        return this.addPart(element);
     }
 
     public all(collection: string | number): ApiUrlMaker {
@@ -18,6 +18,7 @@ export class ApiUrlMaker {
 
     private addPart(part: string | number): ApiUrlMaker {
         if (!this.isValidArgument(part)) {
+            console.error('Trying to add invalid argument: ', part);
             throw new Error('InvalidArgumentException');
         }
         this._parts.push('' + part);

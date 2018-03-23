@@ -1,19 +1,23 @@
 import {HttpEvent, HttpRequest} from '@angular/common/http';
-import {Injectable} from '@angular/core';
 import 'rxjs/add/operator/map';
 import {Observable} from 'rxjs/Observable';
 import {last} from 'rxjs/operators/last';
 import {map} from 'rxjs/operators/map';
-import {ApiUrlMaker, RestService} from '../../';
+import {ApiUrlMaker} from './index';
+import {RestModel} from './rest-model';
 
 export interface FileUploadRequestData {
     file: File;
     key: string;
 }
 
-@Injectable()
-export abstract class UploadService<I = any> extends RestService<I> {
-    protected upload_prefix = 'upload';
+export abstract class UploadRestModel<I = any> extends RestModel<I> {
+    protected $upload_prefix: string;
+
+    constructor() {
+        super();
+        this.$upload_prefix = this.$upload_prefix || 'upload';
+    }
 
     upload<T = any>(formData: FormData | File | FileUploadRequestData): Observable<T> {
         return this.doUpload(this.uploadUrl(), this.createFormData(formData));
@@ -39,7 +43,7 @@ export abstract class UploadService<I = any> extends RestService<I> {
     }
 
     protected doUpload(url: ApiUrlMaker, formData: FormData): Observable<any> {
-        return <any>this._http.post(url.build(), formData);
+        return <any>this.http.post(url.build(), formData);
     }
 
     protected doUploadWithProgress(
@@ -57,7 +61,7 @@ export abstract class UploadService<I = any> extends RestService<I> {
 
         // The `HttpClient.request` API produces a raw event stream
         // which includes start (sent), progress, and response events.
-        return <any>this._http.request(req).pipe(
+        return <any>this.http.request(req).pipe(
             map(onEvent),
             // tap(onTap),
             last() // return last (completed) message to caller
@@ -66,15 +70,15 @@ export abstract class UploadService<I = any> extends RestService<I> {
     }
 
     protected uploadUrl(): ApiUrlMaker {
-        return this.getUploadBaseUrl().all(this.route);
+        return this.getUploadBaseUrl().all(this.$route);
     }
 
     protected propertyUploadUrl(property: string): ApiUrlMaker {
-        return this.getUploadBaseUrl().one(this.route, this.primaryValue).all(property);
+        return this.getUploadBaseUrl().one(this.$route, this.primaryValue).all(property);
     }
 
     protected getUploadBaseUrl(): ApiUrlMaker {
-        const uploadBase = new ApiUrlMaker().all(this.upload_prefix);
+        const uploadBase = new ApiUrlMaker().all(this.$upload_prefix);
         return this.addParentRoutesTo(uploadBase);
     }
 

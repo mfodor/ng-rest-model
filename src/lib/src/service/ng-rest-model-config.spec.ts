@@ -9,6 +9,10 @@ describe('NgRestModelConfig', () => {
         });
     });
 
+    beforeEach(inject([NgRestModelConfig], (service: NgRestModelConfig) => {
+        service.configure({baseUrl: null, http: null});
+    }));
+
     it('should create service', inject([NgRestModelConfig], (service: NgRestModelConfig) => {
         expect(service).toBeTruthy();
     }));
@@ -16,14 +20,22 @@ describe('NgRestModelConfig', () => {
     it('should configure with default options', inject([NgRestModelConfig], (service: NgRestModelConfig) => {
         const baseUrlBefore = service.baseUrl;
         service.configure(void 0);
+
         expect(service.baseUrl).toBe(baseUrlBefore);
+
+        expect(service.http).toBe(void 0);
     }));
 
     it('should configure with given options', inject([NgRestModelConfig], (service: NgRestModelConfig) => {
         const host = 'host:8080/api';
+        const fakeHttp = {fake: true};
         service.configure({
-            baseUrl: host
+            baseUrl: host,
+            http: <any>fakeHttp
         });
+
         expect(service.baseUrl).toBe(host);
+
+        expect(service.http).toBe(fakeHttp);
     }));
 });
