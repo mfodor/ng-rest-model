@@ -8,6 +8,7 @@ import {AlbumComponent} from './codes/album.component';
 import {AppComponentHtmlComponent} from './codes/app-component-html.component';
 import {AppComponentComponent} from './codes/app-component.component';
 import {AppModuleComponent} from './codes/app-module.component';
+import {CodesComponent} from './codes/codes.component';
 import {UserComponent} from './codes/user.component';
 
 @NgModule({
@@ -19,16 +20,14 @@ import {UserComponent} from './codes/user.component';
     ],
     declarations: [
         AppComponent,
+        CodesComponent,
         AppComponentComponent,
         AppComponentHtmlComponent,
         AppModuleComponent,
         AlbumComponent,
         UserComponent
     ],
-    providers: [
-        // Album,
-        // User
-    ],
+    providers: [],
     bootstrap: [
         AppComponent
     ]

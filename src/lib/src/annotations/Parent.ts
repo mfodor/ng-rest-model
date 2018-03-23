@@ -1,8 +1,8 @@
+import {RestModel} from '../classes/index';
 import {getClassName} from '../helpers/index';
-import {RestModel} from '../service/index';
 
-export function Parent<T extends { new(...args: any[]): {} }>(...parents: T[]): any {
-    return function <T extends { new(...args: any[]): {} }>(target: T, propertyKey: string) {
+export function Parent<T extends {new(...args: any[]): {}}>(...parents: T[]): any {
+    return function <T extends {new(...args: any[]): {}}>(target: T, propertyKey: string) {
         if (typeof target !== 'function') {
             throw new Error(
                 'Parent decorator should be applied on the class and not on the property!' +
@@ -12,7 +12,7 @@ export function Parent<T extends { new(...args: any[]): {} }>(...parents: T[]): 
 
         if (!RestModel.isPrototypeOf(target)) {
             throw new Error(
-                'Parent decorator should be applied on a class that extends RestService!' +
+                'Parent decorator should be applied on a class that extends RestModel!' +
                 ` But ${getClassName(target)} is not extending it.`
             );
         }

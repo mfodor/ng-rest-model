@@ -1,2 +1,1 @@
-export * from './HasMany';
-export * from './ILengthAwarePaginator';
+export {ILengthAwarePaginator} from './ILengthAwarePaginator';

@@ -1,4 +1,4 @@
-import {FetchMode, HasMany, Path, PrimaryKey, RestModel} from 'ng-rest-model';
+import {Fillable, HasMany, Path, PrimaryKey, RestModel} from 'ng-rest-model';
 import {Observable} from 'rxjs/Observable';
 import {Album} from './album';
 
@@ -15,40 +15,19 @@ export interface IUser {
 @HasMany('albums', Album)
 export class User extends RestModel<IUser> {
 
-    // @PrimaryKey()
+    @PrimaryKey()
     id: number;
 
+    @Fillable()
     name: string;
 
+    @Fillable()
     email: string;
 
+    @Fillable()
     phone: string;
 
     // HasMany
     albums: Observable<Album>;
-
-    protected $fillable = ['name', 'email', 'phone'];
-
-    constructor(
-        idOrObj?: number | IUser,
-        name?: string,
-        email?: string,
-        phone?: string,
-    ) {
-        super();
-        if (!idOrObj) {
-            return;
-        }
-        if (typeof idOrObj === 'object') {
-            this.init(idOrObj);
-        } else {
-            this.init({
-                id: idOrObj,
-                name,
-                email,
-                phone
-            });
-        }
-    }
 
 }

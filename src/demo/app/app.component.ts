@@ -29,8 +29,6 @@ export class AppComponent implements OnInit {
         album: Album;
     };
 
-    tabs: Tabs;
-
     ngOnInit() {
         this.users$ = User.all();
         this.formModels = {
@@ -41,20 +39,6 @@ export class AppComponent implements OnInit {
             user: null,
             album: null
         };
-        this.tabs = [
-            {name: 'app.module.ts'},
-            {name: 'album.ts'},
-            {name: 'user.ts'},
-            {name: 'app.component.ts'},
-            {name: 'app.component.html'}
-        ];
-        this.tabs.selected = this.tabs[0];
-    }
-
-    selectTab(tab: any, event: Event): void {
-        event.preventDefault();
-        event.stopPropagation();
-        this.tabs.selected = tab;
     }
 
     select(user: User) {

@@ -1,10 +1,10 @@
+import 'rxjs/add/operator/map';
 import {Observable} from 'rxjs/Observable';
 import {HasManyConfig} from '../annotations/index';
+import {RestModel} from '../classes/index';
 import {getter} from '../helpers/index';
 import {ILengthAwarePaginator} from '../interfaces/index';
-import {RestModel} from '../service/index';
 import {FetchMode} from './index';
-import 'rxjs/add/operator/map';
 
 export class HasManyHandler<T extends RestModel, P = ILengthAwarePaginator<T>> {
     private _list: T[] | Observable<T[]>;

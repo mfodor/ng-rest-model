@@ -5,21 +5,27 @@ import {Component} from '@angular/core';
     template: '<pre><code>@NgModule({{ \'{\' }}\n' +
     '    imports: [\n' +
     '        BrowserModule,\n' +
-    '        NgRestModelModule.forRoot({{ \'{\' }}baseUrl: \'https://jsonplaceholder.typicode.com\'}),\n' +
+    '        NgRestModelModule,\n' +
     '        FormsModule\n' +
     '    ],\n' +
     '    declarations: [\n' +
     '        AppComponent\n' +
     '    ],\n' +
-    '    providers: [\n' +
-    '        Album,\n' +
-    '        User\n' +
-    '    ],\n' +
     '    bootstrap: [\n' +
     '        AppComponent\n' +
     '    ]\n' +
     '})\n' +
-    'export class AppModule {{ \'{\' }}}</code></pre>'
+    'export class AppModule {{ \'{\' }}\n' +
+    '    constructor(\n' +
+    '        @Inject(NgRestModelConfig) config: NgRestModelConfig,\n' +
+    '        @Inject(HttpClient) http: HttpClient,\n' +
+    '    ) {{ \'{\' }}\n' +
+    '        config.configure({{ \'{\' }}\n' +
+    '            baseUrl: \'https://jsonplaceholder.typicode.com\',\n' +
+    '            http\n' +
+    '        });\n' +
+    '    }\n' +
+    '}</code></pre>'
 })
 export class AppModuleComponent {
 }

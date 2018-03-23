@@ -1,18 +1,17 @@
-import {RestModel} from '../service/index';
-import {FetchMode, TFetchMode} from '../classes/index';
+import {FetchMode, RestModel, TFetchMode} from '../classes/index';
 import {getClassName, getter} from '../helpers/index';
 
 export interface BelongsToConfig<T = any> {
     field: string;
     route?: string;
-    type?: { new(...args: any[]): T };
+    type?: {new(...args: any[]): T};
     fetch?: TFetchMode;
     async?: boolean;
 }
 
 export function BelongsTo<T = any>(
     field: string | BelongsToConfig,
-    type?: { new(...args: any[]): T },
+    type?: {new(...args: any[]): T},
     route?: string,
     fetch?: TFetchMode,
     async?: boolean
@@ -31,7 +30,7 @@ export function BelongsTo<T = any>(
 
     const privateFieldName = `_${field}`;
 
-    return function <T extends { new(...args: any[]): {} }>(target: T, propertyKey: string) {
+    return function <T extends {new(...args: any[]): {}}>(target: T, propertyKey: string) {
         if (typeof target !== 'function') {
             throw new Error(
                 'BelongsTo decorator should be applied on the class and not on the property!' +
@@ -41,7 +40,7 @@ export function BelongsTo<T = any>(
 
         if (!RestModel.isPrototypeOf(target)) {
             throw new Error(
-                'BelongsTo decorator should be applied on a class that extends RestService!' +
+                'BelongsTo decorator should be applied on a class that extends RestModel!' +
                 ` But ${getClassName(target)} is not extending it.`
             );
         }

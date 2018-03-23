@@ -1,6 +1,5 @@
 import {HasManyHandler} from '../classes/HasManyHandler';
-import {FetchMode, TFetchMode} from '../classes/index';
-import {RestModel} from '../service/index';
+import {FetchMode, RestModel, TFetchMode} from '../classes/index';
 import {getClassName} from '../helpers/index';
 
 export interface HasManyConfig<T = any> {
@@ -48,7 +47,7 @@ export function HasMany<T = any>(
 
         if (!RestModel.isPrototypeOf(target)) {
             throw new Error(
-                'HasMany decorator should be applied on a class that extends RestService!' +
+                'HasMany decorator should be applied on a class that extends RestModel!' +
                 ` But ${getClassName(target)} is not extending it.`
             );
         }

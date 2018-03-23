@@ -1,11 +1,11 @@
+import {RestModel} from '../classes/index';
 import {getClassName} from '../helpers/index';
-import {RestService} from '../service/index';
 
 export function Protected(): any {
     return function (target: any, fieldName: string) {
-        if (!RestService.isPrototypeOf(target.constructor)) {
+        if (!RestModel.isPrototypeOf(target.constructor)) {
             throw new Error(
-                'Protected decorator should be applied on a class that extends Resource!' +
+                'Protected decorator should be applied on a class that extends RestModel!' +
                 ` But ${getClassName(target)} is not extending it.`
             );
         }

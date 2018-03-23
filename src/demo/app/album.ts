@@ -1,5 +1,4 @@
-import {Path, PrimaryKey, RestModel} from 'ng-rest-model';
-import 'rxjs/add/operator/map';
+import {Fillable, Path, PrimaryKey, RestModel} from 'ng-rest-model';
 
 export interface IAlbum {
     id: number;
@@ -9,26 +8,10 @@ export interface IAlbum {
 @Path('albums')
 export class Album extends RestModel<IAlbum> {
 
-    // @PrimaryKey()
+    @PrimaryKey()
     id: number;
 
+    @Fillable()
     title: string;
 
-    // protected route = 'albums';
-    protected $fillable = ['title'];
-
-    constructor(
-        idOrObj?: number | IAlbum,
-        title?: string
-    ) {
-        super();
-        if (!idOrObj) {
-            return;
-        }
-        if (typeof idOrObj === 'object') {
-            this.init(idOrObj);
-        } else {
-            this.init({id: idOrObj, title});
-        }
-    }
 }

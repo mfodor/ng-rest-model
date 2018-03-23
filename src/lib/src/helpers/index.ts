@@ -1,2 +1,2 @@
-export * from './getter';
-export * from './get-class-name';
+export {getter} from './getter';
+export {getClassName} from './get-class-name';

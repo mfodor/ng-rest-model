@@ -4,7 +4,7 @@ import 'rxjs/add/operator/map';
 import 'rxjs/add/operator/mergeMap';
 import {Observable} from 'rxjs/Observable';
 import {ApiUrlMaker, ILengthAwarePaginator, NgRestModelConfig} from '../../index';
-import {HasManyHandler} from '../classes/index';
+import {HasManyHandler} from './index';
 
 export class RestModel<I = any, P = ILengthAwarePaginator<I>> {
     protected $route: string;
@@ -55,10 +55,9 @@ export class RestModel<I = any, P = ILengthAwarePaginator<I>> {
         this.$parents = this.$parents || [];
         this.$hasMany = this.$hasMany || {};
         this.$mappings = this.$mappings || {};
-        Object.defineProperty(this, '$protected', {value: this.$protected, writable: false});
-        Object.defineProperty(this, '$parents', {value: this.$parents, writable: false});
-        Object.defineProperty(this, '$hasMany', {value: this.$hasMany, writable: false});
-        Object.defineProperty(this, '$mappings', {value: this.$mappings, writable: false});
+        ['$protected', '$parents', '$hasMany', '$mappings'].forEach(
+            p => Object.defineProperty(this, p, {value: this[p], writable: false})
+        );
     }
 
     init(obj?: I): this {

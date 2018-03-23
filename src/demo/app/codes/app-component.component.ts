@@ -10,36 +10,21 @@ import {Component} from '@angular/core';
     '    users$: Observable&lt;User[]&gt;;\n' +
     '    selectedUser: User;\n' +
     '\n' +
-    '    formModels: {{ \'{\' }}\n' +
-    '        user: User;\n' +
-    '        album: Album;\n' +
-    '    };\n' +
-    '\n' +
-    '    constructor(private userService: User) {{ \'{\' }}\n' +
-    '    }\n' +
+    '    // ...\n' +
     '\n' +
     '    ngOnInit() {{ \'{\' }}\n' +
-    '        this.users$ = this.userService.all();\n' +
-    '        this.formModels = {{ \'{\' }}\n' +
-    '            user: null,\n' +
-    '            album: null\n' +
-    '        };\n' +
+    '        this.users$ = User.all();\n' +
+    '        // ...\n' +
     '    }\n' +
     '\n' +
-    '    select(user: User) {{ \'{\' }}\n' +
-    '        if (this.selectedUser === user) {{ \'{\' }}\n' +
-    '            this.selectedUser = null;\n' +
-    '            return;\n' +
-    '        }\n' +
-    '        this.selectedUser = user;\n' +
-    '    }\n' +
+    '    // ...\n' +
     '\n' +
     '    newUser() {{ \'{\' }}\n' +
-    '        this.formModels.user = this.userService.new();\n' +
+    '        this.formModels.user = new User();\n' +
     '    }\n' +
     '\n' +
     '    editUser(user: User, event: Event) {{ \'{\' }}\n' +
-    '        // ...\n' +
+    '        this.formModels.user = user.clone();\n' +
     '    }\n' +
     '\n' +
     '    saveUser() {{ \'{\' }}\n' +
@@ -47,17 +32,15 @@ import {Component} from '@angular/core';
     '    }\n' +
     '\n' +
     '    removeUser(user: User, event: Event) {{ \'{\' }}\n' +
-    '        event.preventDefault();\n' +
-    '        event.stopPropagation();\n' +
     '        user.remove().subscribe(/* ... */);\n' +
     '    }\n' +
     '\n' +
     '    newAlbum() {{ \'{\' }}\n' +
-    '        this.formModels.album = this.selectedUser.albums._new();\n' +
+    '        this.formModels.album = new Album();\n' +
     '    }\n' +
     '\n' +
     '    editAlbum(album: Album, event: Event) {{ \'{\' }}\n' +
-    '        // ...\n' +
+    '        this.formModels.album = album.clone();\n' +
     '    }\n' +
     '\n' +
     '    saveAlbum() {{ \'{\' }}\n' +
@@ -65,7 +48,7 @@ import {Component} from '@angular/core';
     '    }\n' +
     '\n' +
     '    addAlbum(): void {{ \'{\' }}\n' +
-    '        this.selectedUser.albums._add(this.formModels.album).subscribe(/* ... */);\n' +
+    '        this.selectedUser.$hasMany.albums.create(this.formModels.album).subscribe(/* ... */);\n' +
     '    }\n' +
     '\n' +
     '    updateAlbum(): void {{ \'{\' }}\n' +
@@ -73,9 +56,7 @@ import {Component} from '@angular/core';
     '    }\n' +
     '\n' +
     '    removeAlbum(album: Album, event: Event): void {{ \'{\' }}\n' +
-    '        event.preventDefault();\n' +
-    '        event.stopPropagation();\n' +
-    '        this.selectedUser.albums._remove(album).subscribe(/* ... */);\n' +
+    '        this.selectedUser.$hasMany.albums.remove(album).subscribe(/* ... */);\n' +
     '    }\n' +
     '}</code></pre>'
 })
