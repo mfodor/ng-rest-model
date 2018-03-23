@@ -85,6 +85,9 @@ export class RestModel<I = any, P = ILengthAwarePaginator<I>> {
     }
 
     equals(other: I | any): boolean {
+        if (!other || typeof other !== 'object' || this.primaryValue !== other[this.$primaryKey]) {
+            return false;
+        }
         const fieldsToCheck = this.getFieldsToFill();
         for (const f of fieldsToCheck) {
             if (this[f] !== other[f]) {
@@ -153,13 +156,13 @@ export class RestModel<I = any, P = ILengthAwarePaginator<I>> {
         return this.http.put(this.itemUrl().build(), this.postData, options).map(this.init.bind(this));
     }
 
-    save(options?: any) {
+    save(options?: any): Observable<this> {
         return this.primaryValue ? this.update(options) : this.create(options);
     }
 
     // DELETE
 
-    remove(options?: any) {
+    remove(options?: any): Observable<this> {
         return this.http.delete(this.itemUrl().build(), options).map(this.init.bind(this));
     }
 
@@ -179,8 +182,13 @@ export class RestModel<I = any, P = ILengthAwarePaginator<I>> {
 
         const fieldsToFill = this.getFieldsToFill();
         for (const key of fieldsToFill) {
-            if (clearMissing || obj.hasOwnProperty(key)) {
-                this[this.getMappedKey(key)] = obj[key];
+            const mappedKey = this.getMappedKey(key);
+            const hasValue = obj.hasOwnProperty(key) || obj.hasOwnProperty(mappedKey);
+            const value = hasValue
+                ? obj.hasOwnProperty(key) ? obj[key] : obj[mappedKey]
+                : null;
+            if (clearMissing || hasValue) {
+                this[mappedKey] = value;
             }
         }
 

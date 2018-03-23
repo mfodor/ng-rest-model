@@ -13,8 +13,8 @@ export interface HasManyConfig<T = any> {
 export function HasMany<T = any>(
     field: string | HasManyConfig,
     type?: {new(...args: any[]): T},
-    route?: string,
     fetch?: TFetchMode,
+    route?: string,
     async?: boolean
 ): any {
     let config: HasManyConfig;
