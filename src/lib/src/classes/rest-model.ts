@@ -3,7 +3,8 @@ import 'rxjs/add/observable/of';
 import 'rxjs/add/operator/map';
 import 'rxjs/add/operator/mergeMap';
 import {Observable} from 'rxjs/Observable';
-import {ApiUrlMaker, ILengthAwarePaginator, NgRestModelConfig} from '../../index';
+import {ApiUrlMaker, ILengthAwarePaginator} from '../../index';
+import {ngRestModelBaseUrl, ngRestModelHttp} from '../service/ng-rest-model-config';
 import {HasManyHandler} from './index';
 
 export class RestModel<I = any, P = ILengthAwarePaginator<I>> {
@@ -16,30 +17,8 @@ export class RestModel<I = any, P = ILengthAwarePaginator<I>> {
     protected $parents: RestModel[];
     $hasMany: {[index: string]: HasManyHandler<any>};
 
-    protected static get http(): HttpClient {
-        return NgRestModelConfig.HTTP;
-    }
-
     protected get http(): HttpClient {
-        return NgRestModelConfig.HTTP;
-    }
-
-    static all<I = any>(options?: any): Observable<I[] | any[]> {
-        return new this().all(options);
-    }
-
-    static page<I = any>(page?: string | number, options?: any): Observable<ILengthAwarePaginator<I>> {
-        return new this().page(page, options);
-    }
-
-    static find<I = any>(id: number | any, options?: any): Observable<RestModel<I>> {
-        return new this().find(id, options);
-    }
-
-    static create<I = any>(obj: I, options?: any): Observable<RestModel<I>> {
-        const inst = new this();
-        inst.init(obj);
-        return inst.create(options);
+        return ngRestModelHttp();
     }
 
     /* *
@@ -236,7 +215,7 @@ export class RestModel<I = any, P = ILengthAwarePaginator<I>> {
     }
 
     protected addParentRoutesTo(maker?: ApiUrlMaker): ApiUrlMaker {
-        maker = maker || new ApiUrlMaker(NgRestModelConfig.BASE_URL);
+        maker = maker || new ApiUrlMaker(ngRestModelBaseUrl());
         if (this.$parents.length) {
             this.$parents.forEach(p => maker.one(p.$route, p.primaryValue));
         }

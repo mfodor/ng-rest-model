@@ -30,7 +30,7 @@ export class AppComponent implements OnInit {
     };
 
     ngOnInit() {
-        this.users$ = User.all();
+        this.users$ = new User().all();
         this.formModels = {
             user: null,
             album: null

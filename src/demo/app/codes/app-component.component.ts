@@ -13,7 +13,7 @@ import {Component} from '@angular/core';
     '    // ...\n' +
     '\n' +
     '    ngOnInit() {{ \'{\' }}\n' +
-    '        this.users$ = User.all();\n' +
+    '        this.users$ = new User().all();\n' +
     '        // ...\n' +
     '    }\n' +
     '\n' +

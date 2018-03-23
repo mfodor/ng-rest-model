@@ -4,14 +4,6 @@ describe('RestModel', () => {
         expect(true).toBe(true);
     });
 
-    describe('static', () => {
-        describe('create', () => {
-            it('should create instance and save it', () => {
-                expect(true).toBe(true);
-            });
-        });
-    });
-
     describe('init', () => {
         it('should aaaa', () => {
             expect(true).toBe(true);

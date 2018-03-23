@@ -22,10 +22,8 @@ describe('NgRestModelConfig', () => {
         service.configure(void 0);
 
         expect(service.baseUrl).toBe(baseUrlBefore);
-        expect(NgRestModelConfig.BASE_URL).toBe(baseUrlBefore);
 
         expect(service.http).toBe(void 0);
-        expect(NgRestModelConfig.HTTP).toBe(void 0);
     }));
 
     it('should configure with given options', inject([NgRestModelConfig], (service: NgRestModelConfig) => {
@@ -37,9 +35,7 @@ describe('NgRestModelConfig', () => {
         });
 
         expect(service.baseUrl).toBe(host);
-        expect(NgRestModelConfig.BASE_URL).toBe(host);
 
         expect(service.http).toBe(fakeHttp);
-        expect(NgRestModelConfig.HTTP).toBe(fakeHttp);
     }));
 });
