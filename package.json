@@ -6,6 +6,7 @@
   "module": "./ng-rest-model.es5.js",
   "es2015": "./ng-rest-model.js",
   "typings": "./ng-rest-model.d.ts",
+  "keywords": ["angular", "angular5", "orm", "rest", "model", "annotation"],
   "author": "Fodor Mánuel <fodormanuel@gmail.com>",
   "license": "MIT",
   "repository": {
