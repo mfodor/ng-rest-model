@@ -17,7 +17,7 @@ export class HasManyHandler<T extends RestModel, P = ILengthAwarePaginator<T>> {
     ) {
     }
 
-    get list(): Observable<T[]> {
+    get list(): Observable<T[]> | T[] {
         if (this._list || this._config.fetch === FetchMode.EAGER) {
             return getter(this._config.async, this._list);
         }

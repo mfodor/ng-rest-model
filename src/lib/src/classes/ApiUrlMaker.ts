@@ -9,7 +9,7 @@ export class ApiUrlMaker {
 
     public one(collection: string | number, element: string | number): ApiUrlMaker {
         this.addPart(collection);
-        return element && this.addPart(element) || this;
+        return this.addPart(element);
     }
 
     public all(collection: string | number): ApiUrlMaker {

@@ -5,7 +5,7 @@ import {getClassName} from '../helpers/index';
 export interface HasManyConfig<T = any> {
     field: string;
     route?: string;
-    type?: {new(...args: any[]): T};
+    type: {new(...args: any[]): T};
     fetch?: TFetchMode;
     async?: boolean;
 }
@@ -52,19 +52,26 @@ export function HasMany<T = any>(
             );
         }
 
+        if (!config.type) {
+            throw new Error(
+                `HasMany: The type should be specified!` +
+                ` Class: ${getClassName(target)}, field: ${config.field}`
+            );
+        }
+
         return class extends target {
-            get [<string>field]() {
-                return this['$hasMany'][<string>field].list;
+            get [config.field]() {
+                return this['$hasMany'][config.field].list;
             }
 
-            set [<string>field](items: any[]) {
-                this['$hasMany'][<string>field].setList(items);
+            set [config.field](items: any[]) {
+                this['$hasMany'][config.field].setList(items);
             }
 
             constructor(...args: any[]) {
                 super(...args);
                 const $hasMany = this['$hasMany'];
-                $hasMany[<string>field] = new HasManyHandler(<any>this, config);
+                $hasMany[config.field] = new HasManyHandler(<any>this, config);
             }
         };
     };

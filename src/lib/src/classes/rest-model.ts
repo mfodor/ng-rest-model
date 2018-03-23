@@ -96,13 +96,23 @@ export class RestModel<I = any, P = ILengthAwarePaginator<I>> {
      * General functions
      */
 
-    plain() {
+    plain(): I | any {
         const json = {};
         for (const key of this.getFieldsToFill()) {
             json[this.getMappedKey(key)] = this[key];
         }
         json[this.$primaryKey] = this.primaryValue;
         return json;
+    }
+
+    equals(other: I | any): boolean {
+        const fieldsToCheck = this.getFieldsToFill();
+        for (const f of fieldsToCheck) {
+            if (this[f] !== other[f]) {
+                return false;
+            }
+        }
+        return true;
     }
 
     /* *
@@ -182,7 +192,7 @@ export class RestModel<I = any, P = ILengthAwarePaginator<I>> {
         // This method is to be overridden
     }
 
-    fill(obj?: I, clearMissing: boolean = false): this {
+    fill(obj?: I | any, clearMissing: boolean = false): this {
         if (!obj || typeof obj !== 'object') {
             console.error('Trying to fill with non-object! This is a silence error.', obj);
             return <any>this;

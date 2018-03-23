@@ -1,5 +1,5 @@
-export function getClassName (target: any): string {
-    if (!target) {
+export function getClassName(target: any): string {
+    if (!target || (typeof target !== 'function' && typeof target !== 'object')) {
         return '[Unknown]';
     }
     const name = target.name;
