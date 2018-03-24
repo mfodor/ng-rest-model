@@ -1,8 +1,9 @@
-import {HttpEvent, HttpRequest} from '@angular/common/http';
+import {HttpEvent} from '@angular/common/http';
 import 'rxjs/add/operator/map';
 import {Observable} from 'rxjs/Observable';
 import {last} from 'rxjs/operators/last';
 import {map} from 'rxjs/operators/map';
+import {ngRestModelBaseUrl} from '../service/ng-rest-model-config';
 import {ApiUrlMaker} from './index';
 import {RestModel} from './rest-model';
 
@@ -51,17 +52,13 @@ export abstract class UploadRestModel<I = any> extends RestModel<I> {
         formData: FormData,
         onEvent?: (event: HttpEvent<any>, index: number) => any
     ): Observable<any> {
-        const req = new HttpRequest('POST', url.toString(), formData, {
-            reportProgress: true
-        });
-
         if (typeof onEvent !== 'function') {
             onEvent = () => void 0;
         }
 
         // The `HttpClient.request` API produces a raw event stream
         // which includes start (sent), progress, and response events.
-        return <any>this.http.request(req).pipe(
+        return <any>this.http.post(url.toString(), formData, {reportProgress: true}).pipe(
             map(onEvent),
             // tap(onTap),
             last() // return last (completed) message to caller
@@ -78,7 +75,7 @@ export abstract class UploadRestModel<I = any> extends RestModel<I> {
     }
 
     protected getUploadBaseUrl(): ApiUrlMaker {
-        const uploadBase = new ApiUrlMaker().all(this.$upload_prefix);
+        const uploadBase = new ApiUrlMaker(ngRestModelBaseUrl()).all(this.$upload_prefix);
         return this.addParentRoutesTo(uploadBase);
     }
 
