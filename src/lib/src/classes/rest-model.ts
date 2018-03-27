@@ -190,7 +190,7 @@ export class RestModel<I = any, P = ILengthAwarePaginator<I>> {
                 ? obj.hasOwnProperty(keyInModel) ? obj[keyInModel] : obj[keyOnServer]
                 : null;
             if (clearMissing || hasValue) {
-                this[keyOnServer] = value;
+                this[keyInModel] = value;
             }
         }
 
