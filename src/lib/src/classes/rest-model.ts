@@ -258,9 +258,9 @@ export class RestModel<I = any, P = ILengthAwarePaginator<I>> {
 
     private getMappedKey(key: string, toServer: boolean = false): string {
         if (!toServer) {
-            return this.$mappingsTo && this.$mappingsTo[key] || key;
-        } else {
             return this.$mappingsFrom && this.$mappingsFrom[key] || key;
+        } else {
+            return this.$mappingsTo && this.$mappingsTo[key] || key;
         }
     }
 
