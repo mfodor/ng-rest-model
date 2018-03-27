@@ -12,7 +12,8 @@ export class RestModel<I = any, P = ILengthAwarePaginator<I>> {
     protected $primaryKey = 'id';
     protected $fillable: string[];
     protected $protected: string[];
-    protected $mappings: {[index: string]: string};
+    protected $mappingsTo: {[index: string]: string};
+    protected $mappingsFrom: {[index: string]: string};
     protected $pagingItemsKey = 'data';
     protected $parents: RestModel[];
     $hasMany: {[index: string]: HasManyHandler<any>};
@@ -28,13 +29,14 @@ export class RestModel<I = any, P = ILengthAwarePaginator<I>> {
     constructor() {
         this.$primaryKey = this.$primaryKey || 'id';
         this.$protected = [
-            '$route', '$primaryKey', '$fillable', '$protected', '$mappings', '$pagingItemsKey', '$parents', '$hasMany'
+            '$route', '$primaryKey', '$fillable', '$protected', '$mappingsTo', '$mappingsFrom', '$pagingItemsKey', '$parents', '$hasMany'
         ]
             .concat((this.$protected || []));
         this.$parents = this.$parents || [];
         this.$hasMany = this.$hasMany || {};
-        this.$mappings = this.$mappings || {};
-        ['$protected', '$parents', '$hasMany', '$mappings'].forEach(
+        this.$mappingsTo = this.$mappingsTo || {};
+        this.$mappingsFrom = this.$mappingsFrom || {};
+        ['$protected', '$parents', '$hasMany', '$mappingsTo', '$mappingsFrom'].forEach(
             p => Object.defineProperty(this, p, {value: this[p], writable: false})
         );
     }
@@ -68,17 +70,17 @@ export class RestModel<I = any, P = ILengthAwarePaginator<I>> {
     }
 
     get postData(): any {
-        return this.plain();
+        return this.plain(true);
     }
 
     /* *
      * General functions
      */
 
-    plain(): I | any {
+    plain(toServer: boolean = false): I | any {
         const json = {};
         for (const key of this.getFieldsToFill()) {
-            json[this.getMappedKey(key)] = this[key];
+            json[this.getMappedKey(key, toServer)] = this[key];
         }
         json[this.$primaryKey] = this.primaryValue;
         return json;
@@ -181,14 +183,14 @@ export class RestModel<I = any, P = ILengthAwarePaginator<I>> {
         }
 
         const fieldsToFill = this.getFieldsToFill();
-        for (const key of fieldsToFill) {
-            const mappedKey = this.getMappedKey(key);
-            const hasValue = obj.hasOwnProperty(key) || obj.hasOwnProperty(mappedKey);
+        for (const keyInModel of fieldsToFill) {
+            const keyOnServer = this.getMappedKey(keyInModel, true);
+            const hasValue = obj.hasOwnProperty(keyInModel) || obj.hasOwnProperty(keyOnServer);
             const value = hasValue
-                ? obj.hasOwnProperty(key) ? obj[key] : obj[mappedKey]
+                ? obj.hasOwnProperty(keyInModel) ? obj[keyInModel] : obj[keyOnServer]
                 : null;
             if (clearMissing || hasValue) {
-                this[mappedKey] = value;
+                this[keyOnServer] = value;
             }
         }
 
@@ -254,8 +256,12 @@ export class RestModel<I = any, P = ILengthAwarePaginator<I>> {
         return new (<any>this.constructor)().init(i);
     }
 
-    private getMappedKey(key: string): string {
-        return this.$mappings && this.$mappings[key] || key;
+    private getMappedKey(key: string, toServer: boolean = false): string {
+        if (!toServer) {
+            return this.$mappingsTo && this.$mappingsTo[key] || key;
+        } else {
+            return this.$mappingsFrom && this.$mappingsFrom[key] || key;
+        }
     }
 
     private getFieldsToFill(): string[] {

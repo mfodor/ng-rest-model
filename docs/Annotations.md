@@ -136,13 +136,14 @@ class Post extends RestModel<Post> {
 }
 ```
 
-If annotations are not preferred you can 'override' `$mappings` field:
+If annotations are not preferred you can 'override' `$mappingsFrom` and `$mappingsTo` field:
 
 ```typescript
 class Post extends RestModel {
     userId: number;
     
-    protected $mappings = {userId: 'user_id'};
+    protected $mappingsFrom = {user_id: 'userId'};
+    protected $mappingsTo = {userId: 'user_id'};
 }
 ```
 

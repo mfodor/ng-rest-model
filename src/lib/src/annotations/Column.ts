@@ -12,11 +12,15 @@ export function Column(fieldNameOnServer: string): any {
 
         const proto = target.constructor.prototype;
 
-        if (!proto.$mappings) {
-            proto.$mappings = {};
+        if (!proto.$mappingsFrom) {
+            proto.$mappingsFrom = {};
         }
 
-        proto.$mappings[fieldNameOnClient] = fieldNameOnServer;
-        proto.$mappings[fieldNameOnServer] = fieldNameOnClient;
+        if (!proto.$mappingsTo) {
+            proto.$mappingsTo = {};
+        }
+
+        proto.$mappingsTo[fieldNameOnClient] = fieldNameOnServer;
+        proto.$mappingsFrom[fieldNameOnServer] = fieldNameOnClient;
     };
 }
