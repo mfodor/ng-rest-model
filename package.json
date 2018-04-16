@@ -8,6 +8,7 @@
   "typings": "./ng-rest-model.d.ts",
   "keywords": [
     "angular",
+    "angular2",
     "angular5",
     "laravel",
     "orm",

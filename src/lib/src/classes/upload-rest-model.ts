@@ -58,7 +58,7 @@ export abstract class UploadRestModel<I = any> extends RestModel<I> {
 
         // The `HttpClient.request` API produces a raw event stream
         // which includes start (sent), progress, and response events.
-        return <any>this.http.post(url.toString(), formData, {reportProgress: true}).pipe(
+        return <any>this.http.post(url.toString(), formData, {reportProgress: true, observe: 'events'}).pipe(
             map(onEvent),
             // tap(onTap),
             last() // return last (completed) message to caller
