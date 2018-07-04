@@ -1,33 +1,27 @@
-# ng-rest-model
-A JavaScript model class for easily calling REST API inspired by Laravel's ORM
+# NgRestModelApp
 
-# Warning
+This project was generated with [Angular CLI](https://github.com/angular/angular-cli) version 6.0.8.
 
-With annotations a complete rethink of code design came. So versions above 0.0.7
-are not compatible with versions until 0.0.7!
+## Development server
 
-This module is under hard development but is usable already. However, there is no
-warranty that it won't fail in some situations.
+Run `ng serve` for a dev server. Navigate to `http://localhost:4200/`. The app will automatically reload if you change any of the source files.
 
-## Upcoming improvements
+## Code scaffolding
 
-- Unit tests
-- Finish documentation
-- Investigation in cases of FetchMode.EAGER (may buggy with no value loaded eagerly
-and in different conjunctions with async parameter)
+Run `ng generate component component-name` to generate a new component. You can also use `ng generate directive|pipe|service|class|guard|interface|enum|module`.
 
-## Usage
+## Build
 
-[See in the docs](docs/Usage.md)
+Run `ng build` to build the project. The build artifacts will be stored in the `dist/` directory. Use the `--prod` flag for a production build.
 
-## Documentation
+## Running unit tests
 
-[Link](docs/README.md)
+Run `ng test` to execute the unit tests via [Karma](https://karma-runner.github.io).
 
-## Contributing
+## Running end-to-end tests
 
-Any contribution is welcome if the goal is not missed: to have a useful ORM
-like service that not fits for every situation but for most of the cases and is
-easily configurable.
+Run `ng e2e` to execute the end-to-end tests via [Protractor](http://www.protractortest.org/).
 
-More details in the [CONTRIBUTING.md](CONTRIBUTING.md) file.
+## Further help
+
+To get more help on the Angular CLI use `ng help` or go check out the [Angular CLI README](https://github.com/angular/angular-cli/blob/master/README.md).
