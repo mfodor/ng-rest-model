@@ -1,20 +1,22 @@
 import {ModuleWithProviders, NgModule, Optional, SkipSelf} from '@angular/core';
-import {INgRestModelConfig, NgRestModelConfig, NgRestModelService} from './src/service';
+import {NG_REST_MODEL_OPTIONS} from './src/ng-rest-model.token';
+import {NgRestModelService} from './src/service/ng-rest-model.service';
 
+export interface NgRestModelOptions {
+    baseUrl?: string;
+}
 
-@NgModule({
-    imports: [],
-    declarations: [],
-    exports: [],
-    providers: [NgRestModelService]
-})
+@NgModule()
 export class NgRestModelModule {
-    static forRoot(config: INgRestModelConfig): ModuleWithProviders {
-        console.log('forRoot got ', config);
+    static forRoot(config: NgRestModelOptions): ModuleWithProviders {
         return {
             ngModule: NgRestModelModule,
             providers: [
-                {provide: NgRestModelConfig, useValue: config}
+                {
+                    provide: NG_REST_MODEL_OPTIONS,
+                    useValue: config
+                },
+                NgRestModelService
             ]
         };
     }

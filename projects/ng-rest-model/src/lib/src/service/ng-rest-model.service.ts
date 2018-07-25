@@ -1,54 +1,41 @@
 import {HttpClient} from '@angular/common/http';
-import {Injectable, Optional} from '@angular/core';
+import {Inject, Injectable} from '@angular/core';
 import {RestModel} from '../classes';
+import {NG_REST_MODEL_OPTIONS} from '../ng-rest-model.token';
 
-export interface INgRestModelConfig {
+export class NgRestModelConfig {
     http?: HttpClient;
-    baseUrl?: string;
-}
-
-export class NgRestModelConfig implements INgRestModelConfig {
-    http: HttpClient;
     baseUrl: string;
 }
 
 @Injectable()
-// @Injectable({
-//     providedIn: 'root'
-// })
 export class NgRestModelService {
-    private _baseUrl: string;
+    private _config: NgRestModelConfig;
+
+    // private _baseUrl: string;
 
     // private _http: HttpClient;
 
     public get baseUrl(): string {
-        return this._baseUrl;
+        return this._config.baseUrl;
     }
 
     public get http(): HttpClient {
         return this._http;
     }
 
-    public get config(): INgRestModelConfig {
-        return {
-            http: this._http,
-            baseUrl: this._baseUrl
-        };
+    public get config(): NgRestModelConfig {
+        return this._config;
     }
 
     constructor(
         private _http: HttpClient,
-        @Optional() config: NgRestModelConfig,
+        @Inject(NG_REST_MODEL_OPTIONS) config: any = null,
     ) {
-        console.log('consturcting NgRestModelService, config: ', config);
         if (config) {
-            this.configure(config);
+            this._config = config;
+            this._config.http = this._http;
         }
-    }
-
-    configure(options: INgRestModelConfig): void {
-        this._http = options && options.http || this._http;
-        this._baseUrl = options && options.baseUrl || this._baseUrl || '';
     }
 
     m<T extends RestModel>(classDef: typeof RestModel | any): T {
@@ -56,7 +43,6 @@ export class NgRestModelService {
     }
 
     createModel<T extends RestModel>(classDef: typeof RestModel | any): T {
-        console.log('creating model with config: ', this.config);
         return <T> new classDef().config(this.config);
     }
 

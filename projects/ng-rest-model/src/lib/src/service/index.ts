@@ -1,1 +1,1 @@
-export {NgRestModelService, INgRestModelConfig, NgRestModelConfig} from './ng-rest-model.service';
+export {NgRestModelService, NgRestModelConfig} from './ng-rest-model.service';

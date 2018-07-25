@@ -1,10 +1,10 @@
 import {HttpClientModule} from '@angular/common/http';
 import {NgModule} from '@angular/core';
 import {BrowserModule} from '@angular/platform-browser';
-import {NgRestModelModule} from '../../projects/ng-rest-model/src/lib/ng-rest-model.module';
+import {NgRestModelModule} from 'ng-rest-model';
 
 import {AppComponent} from './app.component';
-import {Denomination} from './Denomination';
+import {User} from './User';
 
 @NgModule({
     declarations: [
@@ -14,21 +14,11 @@ import {Denomination} from './Denomination';
         BrowserModule,
         HttpClientModule,
         NgRestModelModule.forRoot({
-            baseUrl: 'http://localhost:5656/api'
+            baseUrl: 'https://jsonplaceholder.typicode.com'
         }),
     ],
-    providers: [Denomination],
+    providers: [User],
     bootstrap: [AppComponent]
 })
 export class AppModule {
-    // constructor(
-    //     @Inject(NgRestModelService) restService: NgRestModelService,
-    //     @Inject(HttpClient) http: HttpClient,
-    // ) {
-    //     restService.configure({
-    //         baseUrl: 'http://localhost:8000/api',
-    //         http
-    //     });
-    //     console.log('configured', restService);
-    // }
 }

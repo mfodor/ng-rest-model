@@ -1,6 +1,6 @@
 import {Component, OnInit} from '@angular/core';
-import {Denomination} from './Denomination';
 import {NgRestModelService} from 'ng-rest-model';
+import {User} from './User';
 
 @Component({
     selector: 'app-root',
@@ -11,12 +11,13 @@ export class AppComponent implements OnInit {
     title = 'app';
 
     constructor(
-        private restModel: NgRestModelService
-    ) {}
+        private restService: NgRestModelService
+    ) {
+    }
 
     public ngOnInit() {
-        this.restModel.m(Denomination).all().subscribe(denominations => {
-            console.log(denominations);
+        this.restService.m(User).all().subscribe(users => {
+            console.log(users);
         });
     }
 

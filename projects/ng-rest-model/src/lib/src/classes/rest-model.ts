@@ -2,7 +2,7 @@ import {HttpClient} from '@angular/common/http';
 import {Observable} from 'rxjs/internal/Observable';
 import {map} from 'rxjs/operators';
 import {ILengthAwarePaginator} from '../interfaces';
-import {INgRestModelConfig} from '../service';
+import {NgRestModelConfig} from '../service';
 import {ApiUrlMaker} from './ApiUrlMaker';
 import {HasManyHandler} from './HasManyHandler';
 
@@ -28,8 +28,8 @@ export class RestModel<I = any, P = ILengthAwarePaginator<I>> {
         return this._baseUrl;
     }
 
-    protected _config: INgRestModelConfig;
-    public config(config: INgRestModelConfig) {
+    protected _config: NgRestModelConfig;
+    public config(config: NgRestModelConfig) {
         if (config) {
             this._http = config.http;
             this._baseUrl = config.baseUrl;
@@ -39,7 +39,7 @@ export class RestModel<I = any, P = ILengthAwarePaginator<I>> {
 
     public setBaseUrl(baseUrl: string) {
         this._baseUrl = baseUrl;
-        this._config = {
+        this._config = <NgRestModelConfig>{
             http: this._http,
             baseUrl: baseUrl
         };
@@ -48,7 +48,7 @@ export class RestModel<I = any, P = ILengthAwarePaginator<I>> {
 
     public setHttp(http: HttpClient) {
         this._http = http;
-        this._config = {
+        this._config = <NgRestModelConfig>{
             http: http,
             baseUrl: this._baseUrl
         };

@@ -39,7 +39,7 @@ export function BelongsTo<T = any>(
 
     const privateFieldName = `_${field}`;
 
-    return function <T extends {new(...args: any[]): {}}>(target: T, propertyKey: string) {
+    return function <R extends {new(...args: any[]): {}}>(target: R, propertyKey: string) {
         if (typeof target !== 'function') {
             throw new Error(
                 'BelongsTo decorator should be applied on the class and not on the property!' +
