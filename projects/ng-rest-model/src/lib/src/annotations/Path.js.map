@@ -1,0 +1,1 @@
+{"version":3,"file":"Path.js","sourceRoot":"","sources":["Path.ts"],"names":[],"mappings":";;AAAA,cAAqB,IAAY;IAC7B,MAAM,CAAC,UAAS,MAAW;QACvB,MAAM,CAAC,SAAS,CAAC,MAAM,GAAG,IAAI,CAAC;IACnC,CAAC,CAAC;AACN,CAAC;AAJD,oBAIC","sourcesContent":["export function Path(path: string) {\n    return function(target: any) {\n        target.prototype.$route = path;\n    };\n}\n"]}

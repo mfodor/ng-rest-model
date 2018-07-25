@@ -1,0 +1,1 @@
+{"version":3,"file":"index.js","sourceRoot":"","sources":["index.ts"],"names":[],"mappings":";;AAAA,mCAAgC;AAAxB,0BAAA,MAAM,CAAA;AACd,mDAA8C;AAAtC,wCAAA,YAAY,CAAA","sourcesContent":["export {getter} from './getter';\nexport {getClassName} from './get-class-name';\n"]}
