@@ -1,1 +1,0 @@
-{"version":3,"file":"index.js","sourceRoot":"","sources":["index.ts"],"names":[],"mappings":";;AAAA,+DAA+E;AAAlD,mDAAA,iBAAiB,CAAA","sourcesContent":["export { INgRestModelConfig, NgRestModelConfig } from './ng-rest-model-config';\n"]}

@@ -1,1 +1,0 @@
-{"version":3,"file":"index.js","sourceRoot":"","sources":["index.ts"],"names":[],"mappings":";;AAAA,6DAA4D;AAApD,sDAAA,qBAAqB,CAAA;AAC7B,mCAA2C;AAAnC,qCAAA,iBAAiB,CAAA","sourcesContent":["export {NG_REST_MODEL_OPTIONS} from './ng-rest-model.token';\nexport {NgRestModelModule} from './module';\n"]}
