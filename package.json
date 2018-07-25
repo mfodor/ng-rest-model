@@ -3,12 +3,15 @@
   "version": "0.0.0",
   "scripts": {
     "ng": "ng",
-    "prestart": "ng build --prod ng-rest-model",
+    "build:lib": "ng build --prod ng-rest-model",
+    "prestart": "npm run build:lib",
     "start": "ng serve --port 5655",
     "build": "ng build",
     "test": "ng test",
     "lint": "ng lint",
-    "e2e": "ng e2e"
+    "e2e": "ng e2e",
+    "npm:pack": "cd dist/example-ng6-lib && npm pack",
+    "package": "npm run build:lib && npm run npm:pack"
   },
   "private": true,
   "dependencies": {
