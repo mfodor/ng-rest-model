@@ -10,7 +10,7 @@
     "test": "ng test",
     "lint": "ng lint",
     "e2e": "ng e2e",
-    "npm:pack": "cd dist/example-ng6-lib && npm pack",
+    "npm:pack": "cd dist/ng-rest-model && npm pack",
     "package": "npm run build:lib && npm run npm:pack"
   },
   "private": true,
