@@ -1,6 +1,6 @@
 {
   "name": "ng-rest-model-app",
-  "version": "0.2.1",
+  "version": "0.2.2",
   "scripts": {
     "ng": "ng",
     "build:lib": "ng build --prod ng-rest-model",
