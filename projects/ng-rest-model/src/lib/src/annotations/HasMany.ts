@@ -1,6 +1,7 @@
 import {HasManyHandler} from '../classes/HasManyHandler';
-import {FetchMode, RestModel, TFetchMode} from '../classes/index';
-import {getClassName} from '../helpers/index';
+import {FetchMode, TFetchMode} from '../classes/FetchMode';
+import {RestModel} from '../classes/rest-model';
+import {getClassName} from '../helpers/get-class-name';
 
 export interface HasManyConfig<T = any> {
     field: string;

@@ -1,9 +1,10 @@
 import {HttpClient} from '@angular/common/http';
 import { Observable } from 'rxjs/internal/Observable';
 import {map} from 'rxjs/operators';
-import {ApiUrlMaker, ILengthAwarePaginator, NgRestModelConfigStore} from '../../index';
-import {ngRestModelBaseUrl, ngRestModelHttp} from '../service/ng-rest-model-config';
-import {HasManyHandler} from './index';
+import {ApiUrlMaker} from '../classes/ApiUrlMaker';
+import {ILengthAwarePaginator} from '../interfaces/ILengthAwarePaginator';
+import {NgRestModelConfigStore, ngRestModelBaseUrl, ngRestModelHttp} from '../service/ng-rest-model-config';
+import {HasManyHandler} from './HasManyHandler';
 
 export class RestModel<I = any, P = ILengthAwarePaginator<I>> {
     protected $route: string;
@@ -45,7 +46,7 @@ export class RestModel<I = any, P = ILengthAwarePaginator<I>> {
     }
 
     clear(): this {
-        let fieldsToFill = this.getFieldsToFill();
+        const fieldsToFill = this.getFieldsToFill();
         for (const key of fieldsToFill) {
             this[key] = void 0;
         }

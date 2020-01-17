@@ -78,8 +78,9 @@ export class AppComponent implements OnInit {
     removeUser(user: User, event: Event) {
         event.preventDefault();
         event.stopPropagation();
-        user.remove().subscribe((removed: User) => {
-            alert(`Removed user: ${removed.name} (${removed.email}, ${removed.phone})`);
+        user.clone().remove().subscribe((resp) => {
+            alert(`Removed user: ${user.name} (${user.email}, ${user.phone})`);
+            user.deleted = true;
         });
     }
 

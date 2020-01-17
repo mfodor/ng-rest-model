@@ -1,5 +1,7 @@
-import {FetchMode, RestModel, TFetchMode} from '../classes/index';
-import {getClassName, getter} from '../helpers/index';
+import {FetchMode, TFetchMode} from '../classes/FetchMode';
+import {RestModel} from '../classes/rest-model';
+import {getClassName} from '../helpers/get-class-name';
+import {getter} from '../helpers/getter';
 
 export interface BelongsToConfig<T = any> {
     field: string;

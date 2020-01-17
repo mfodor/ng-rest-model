@@ -1,5 +1,5 @@
-import {RestModel} from '../classes/index';
-import {getClassName} from '../helpers/index';
+import {RestModel} from '../classes/rest-model';
+import {getClassName} from '../helpers/get-class-name';
 
 export function Protected(): any {
     return function (target: any, fieldName: string) {

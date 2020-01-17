@@ -30,4 +30,6 @@ export class User extends RestModel<IUser> {
     // HasMany
     albums: Observable<Album[]>;
 
+    deleted: boolean;
+
 }

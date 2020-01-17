@@ -1,10 +1,10 @@
 import { map } from 'rxjs/internal/operators';
 import {Observable} from 'rxjs/internal/Observable';
-import {HasManyConfig} from '../annotations/index';
-import {RestModel} from '../classes/index';
-import {getter} from '../helpers/index';
-import {ILengthAwarePaginator} from '../interfaces/index';
-import {FetchMode} from './index';
+import {HasManyConfig} from '../annotations/HasMany';
+import {RestModel} from '../classes/rest-model';
+import {getter} from '../helpers/getter';
+import {ILengthAwarePaginator} from '../interfaces/ILengthAwarePaginator';
+import {FetchMode} from './FetchMode';
 
 export class HasManyHandler<T extends RestModel, P = ILengthAwarePaginator<T>> {
     private _list: T[] | Observable<T[]>;
@@ -55,7 +55,7 @@ export class HasManyHandler<T extends RestModel, P = ILengthAwarePaginator<T>> {
     }
 
     create(obj: T, options?: any): Observable<T> {
-        let newItem = new this._config.type().addParent(this._owner).init(obj);
+        const newItem = new this._config.type().addParent(this._owner).init(obj);
         return this.save(newItem, options);
     }
 
@@ -116,7 +116,7 @@ export class HasManyHandler<T extends RestModel, P = ILengthAwarePaginator<T>> {
     }
 
     private fetchPage(page?: string | number, options?: any): Observable<T[]> {
-        let instance = this.getParentedInstance();
+        const instance = this.getParentedInstance();
         return instance.page(page, options)
                        .pipe(map((resp: any) => {
                            this.paging = resp;

@@ -2,7 +2,7 @@ import {HttpEvent} from '@angular/common/http';
 import {Observable} from 'rxjs/internal/Observable';
 import {map, last} from 'rxjs/internal/operators';
 import {ngRestModelBaseUrl} from '../service/ng-rest-model-config';
-import {ApiUrlMaker} from './index';
+import {ApiUrlMaker} from './ApiUrlMaker';
 import {RestModel} from './rest-model';
 
 export interface FileUploadRequestData {

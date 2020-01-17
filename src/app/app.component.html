@@ -15,6 +15,7 @@
           <tr (click)="select(user)"
               style="cursor: pointer"
               [class.table-active]="selectedUser === user"
+              *ngIf="!user.deleted"
           >
             <td>
               <a href="" (click)="removeUser(user, $event)">Remove</a>

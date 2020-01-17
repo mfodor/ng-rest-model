@@ -1,1 +1,0 @@
-export {ILengthAwarePaginator} from './ILengthAwarePaginator';
